@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Tauri & Rust build artifacts
+src-tauri/target/
+
+# Compiled Web Frontend
+dist/
+build/
+
+# Environment / Secret files
+.env
+*.env.local
