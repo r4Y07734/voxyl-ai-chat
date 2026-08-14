@@ -76,8 +76,8 @@ describe('mobile_landing HTML › LU branding assets', () => {
   })
 
   it('has LU wordmark and no old brand strings', () => {
-    expect(html).toContain('<title>LU</title>')
-    expect(html).toContain('class="auth-logo">LU<')
+    expect(html).toContain('<title>Voxyl AI</title>')
+    expect(html).toContain('class="auth-logo">Voxyl AI<')
     expect(html).not.toContain('LUncensored')
     expect(html).not.toContain('Locally Uncensored')
   })

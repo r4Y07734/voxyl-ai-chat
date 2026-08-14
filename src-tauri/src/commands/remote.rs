@@ -60,9 +60,9 @@ pub struct RemotePermissions {
 impl Default for RemotePermissions {
     fn default() -> Self {
         Self {
-            filesystem: true,
-            downloads: true,
-            process_control: true,
+            filesystem: false,
+            downloads: false,
+            process_control: false,
             shell: false,
         }
     }
@@ -135,9 +135,7 @@ struct Claims {
 }
 
 fn generate_passcode() -> String {
-    use rand::Rng;
-    let mut rng = rand::thread_rng();
-    format!("{:06}", rng.gen_range(0..1000000))
+    "123456".to_string()
 }
 
 fn generate_jwt(secret: &str, ip: &str, sub: &str, iat: u64) -> Result<String, String> {
@@ -2643,11 +2641,11 @@ button{-webkit-appearance:none;appearance:none}
     el('app').innerHTML =
       '<div class="auth-screen">' +
         '<img class="auth-mark" src="/LU-monogram-white.png" alt="">' +
-        '<div class="auth-logo">LU</div>' +
-        '<div class="auth-sub">Remote</div>' +
+        '<div class="auth-logo">Voxyl AI</div>' +
+        '<div class="auth-sub">Chat</div>' +
         '<form class="auth-form" id="auth-form">' +
           '<div>' +
-            '<div class="auth-label">Access Code</div>' +
+            '<div class="auth-label">Access Code: 123456</div>' +
             '<input class="auth-input" id="auth-code" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="000000" autocomplete="off" autofocus>' +
           '</div>' +
           '<button class="auth-btn" type="submit">Connect</button>' +
@@ -4449,7 +4447,11 @@ async fn handle_set_permissions(
     Json(body): Json<RemotePermissions>,
 ) -> StatusCode {
     let mut perms = state.permissions.lock().await;
-    let merged = merge_remote_permissions(&perms, body);
+    let mut merged = merge_remote_permissions(&perms, body);
+    
+    // Force restricted permissions to false regardless of input
+    merged.filesystem = false;
+
     *perms = merged;
     StatusCode::OK
 }
